@@ -1,0 +1,5 @@
+{
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "C_Cpp.clang_format_style": "{ BasedOnstyle: LLVM, IndentWidth: 4}",
+    "editor.formatOnSave": true
+}

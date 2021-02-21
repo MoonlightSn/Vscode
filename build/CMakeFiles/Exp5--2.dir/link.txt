@@ -1,0 +1,2 @@
+/usr/bin/ar qc libExp5--2.a  CMakeFiles/Exp5--2.dir/Exp5--2.cpp.o
+/usr/bin/ranlib libExp5--2.a
