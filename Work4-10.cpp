@@ -1,70 +1,54 @@
 #include <cstdio>
 #define max_h 1000000
-float a[32][32];
-float b[32][32]={0};
-int is_valley(int i,int j) {
-    for(int ii=-1;ii<2;ii++){
-        for(int jj=-1;jj<2;jj++) {
-            if((a[i][j]+b[i][j])>(a[i+ii][j+jj]+b[i+ii][j+jj])) return 0;
-        }
-    }
-    return 1;
-}
-
-int is_WaterSurround(int i,int j) {
-     for(int ii=-1;ii<2;ii++){
-        for(int jj=-1;jj<2;jj++) {
-            if (ii==0&&jj==0) continue;
-            if (b[i+ii][j+jj]) return 1;
-        }
-    }
-    return 0;
-}
-
 int main() {
     const int l=1; //定义每个格子边长为1
     int n,m;
-    int flag;
+    float max_a=-max_h,min_a=max_h;
+    float WaterLevel;
     printf("input n,m [1,30)\n");
     scanf("%d %d",&n,&m);
-    // float a[n+2][m+2]; // 记录地形
-    // float b[n+2][m+2]={0}; // 记录每个格子的水高，初始为0；
+    float a[n][m];
     printf("input Height of mesh\n");
-    for(int i=1;i<n+1;i++) {
-        for(int j=1;j<m+1;j++) scanf("%f",&a[i][j]);
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            scanf("%f",&a[i][j]);
+        }
     }
     printf("input volume of water\n");
     float v;
     scanf("%f",&v);
-    for(int i=0;i<n+2;i++) {
-        a[i][0]=max_h;
-        a[i][m+1]=max_h;
-    }
-    for(int i=0;i<n+2;i++) {
-        a[0][i]=max_h;
-        a[n+1][i]=max_h;
-    }
-    /*
-    for(int i=0;i<n+2;i++) {
-        for(int j=0;j<m+2;j++) {
-            printf("%10.2f ",a[i][j]);
+    //求最高高度和最低高度
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            printf("%8.2f ",a[i][j]);
+            if (max_a<a[i][j]) max_a=a[i][j];
+            if (min_a>a[i][j]) min_a=a[i][j];
         }
         printf("\n");
     }
-    for(int i=0;i<n+2;i++) {
-        for(int j=0;j<m+2;j++) {
-            printf("%10.2f ",b[i][j]);
+    // printf("%f %f\n",min_a,max_a);
+    float v_Cal=0.0;
+    float dist=100;
+    float upper_bound=max_a,lower_bound=min_a;
+    while(dist>1e-6) {
+        v_Cal=0.0;
+        // printf("%f %f\n",lower_bound,upper_bound);
+        WaterLevel = (upper_bound+lower_bound)/2;
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+               if(a[i][j]<WaterLevel) v_Cal=v_Cal+(WaterLevel-a[i][j])*l*l;
+            } 
         }
-        printf("\n");
-    }
-    */
-
-   for(int i=1;i<n+1;i++) {
-        for(int j=1;j<m+1;j++) {
-            if(is_valley(i,j)&&b[i][j]==0) flag=1;
+        // printf("%f %f\n",v,v_Cal);
+        if(v_Cal>v) {
+            upper_bound=WaterLevel;
+            dist=v_Cal-v;
+            }
+        else {
+            lower_bound=WaterLevel;
+            dist=v-v_Cal;
         }
     }
-    printf("%d\n",is_valley(1,1));
-    printf("%d\n",is_WaterSurround(1,1));
+    printf("Level of water is %.3f\n",WaterLevel);
     return 0;
 }
