@@ -29,14 +29,20 @@ int main() {
     // printf("%f %f\n",min_a,max_a);
     float v_Cal=0.0;
     float dist=100;
-    float upper_bound=max_a,lower_bound=min_a;
-    while(dist>1e-6) {
+    int area;
+    float upper_bound=max_a+v/(n*m*l*l-0.5),lower_bound=min_a; //上界比全等高时的水平面稍高一点点；
+    // 根据题意，应该没有那种类似高原盆地的存在，否则很复杂。
+    while(dist>1e-3) {
         v_Cal=0.0;
+        area=0;
         // printf("%f %f\n",lower_bound,upper_bound);
         WaterLevel = (upper_bound+lower_bound)/2;
         for(int i=0;i<n;i++) {
             for(int j=0;j<m;j++) {
-               if(a[i][j]<WaterLevel) v_Cal=v_Cal+(WaterLevel-a[i][j])*l*l;
+               if(a[i][j]<WaterLevel) {
+                   v_Cal=v_Cal+(WaterLevel-a[i][j])*l*l;
+                   area+=l*l;
+               }
             } 
         }
         // printf("%f %f\n",v,v_Cal);
@@ -49,6 +55,8 @@ int main() {
             dist=v-v_Cal;
         }
     }
-    printf("Level of water is %.3f\n",WaterLevel);
+    printf("Level of water is %.2f\n",WaterLevel);
+    printf("Volume of water is %.2f\n",v_Cal);
+    printf("Area of water is %d\n",area);
     return 0;
 }
