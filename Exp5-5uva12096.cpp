@@ -14,7 +14,7 @@ map<Set,int> IDcache;
 vector<Set> Setcache;
 
 int ID (Set x) {
-    if(IDcache.count(x)) return IDcache[x];
+    if(IDcache.count(x)) return IDcache[x]; //map类型IDcache中有x的话，返回对应的int值
     Setcache.push_back(x); //添加新集合
     return IDcache[x]=Setcache.size() - 1;
 }
@@ -26,7 +26,7 @@ int main () {
     for (int i=0; i<n;i++) {
         string op;
         cin>>op;
-        if(op[0]=='p') s.push(ID(Set()));
+        if(op[0]=='P') s.push(ID(Set()));
         else if (op[0]=='D') s.push(s.top());
         else {
             Set x1 = Setcache[s.top()]; s.pop();
